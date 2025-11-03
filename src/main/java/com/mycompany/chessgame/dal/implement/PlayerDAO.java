@@ -171,19 +171,7 @@ public class PlayerDAO extends DBContext implements I_DAO<Players> {
         player.setUpdated_at(rs.getDate("updated_at"));
         return player;
     }
-
-    public List<Players> getAllPlayerssOrderByRatingAsc() throws SQLException {
-        List<Players> list = new ArrayList<>();
-        try (
-                connection = getConnection();
-                String sql = "SELECT * FROM accounts ORDER BY rating ASC";
-                statement = connection.prepareStatement(sql);
-                statement 
-        } catch (Exception e) {
-
-        }
-        return list;
-    }
+    
 
     public static void main(String[] args) {
         PlayerDAO dao = new PlayerDAO();

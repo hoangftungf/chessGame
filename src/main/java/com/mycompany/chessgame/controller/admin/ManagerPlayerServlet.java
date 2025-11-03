@@ -25,8 +25,6 @@ import java.sql.Date;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 /**
  *
@@ -53,17 +51,8 @@ public class ManagerPlayerServlet extends HttpServlet {
             case "list-account":
                 viewListAccount(request, response);
                 break;
-            case "account-add":
-                addAccount(request, response);
-                break;
             case "account-detail":
                 viewAccoutDetail(request, response);
-                break;
-            case "sortByAsc":
-                viewAccountByAscRating(request, response);
-                break;
-            case "sortByDesc":
-                viewAccountByDescRating(request, response);
                 break;
             default:
                 throw new AssertionError();
@@ -84,17 +73,11 @@ public class ManagerPlayerServlet extends HttpServlet {
     }
 
     private void viewListAccount(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // gọi tới hàm findAll() của AccountDAO
+        // gọi tới hàm findAll() của PlayerDAO
         List<Players> listAccount = playerDAO.findAll();
         // set list vào request
         request.setAttribute("listAccount", listAccount);
         request.getRequestDispatcher(URL_LIST_ACCOUNT).forward(request, response);
-    }
-
-    private void addAccount(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Lấy ra các club đang tồn tại trong hệ thống
-        request.getRequestDispatcher("view/admin/admin/add-account.jsp").forward(request, response);
     }
 
     private void viewAccoutDetail(HttpServletRequest request, HttpServletResponse response)
@@ -133,22 +116,22 @@ public class ManagerPlayerServlet extends HttpServlet {
         }
     }
 
-    private void viewAccountByAscRating(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            PlayerDAO playerDAO = new PlayerDAO();
-            List<Players> listPlayer = playerDAO.getAllPlayerssOrderByRatingAsc();
-        } catch (Exception e) {
-
-        }
-    }
-
-    private void viewAccountByDescRating(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-
-        } catch (Exception e) {
-
-        }
-    }
+//    private void viewAccountByAscRating(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        try {
+//            PlayerDAO playerDAO = new PlayerDAO();
+//            List<Players> listPlayer = playerDAO.getAllPlayerssOrderByRatingAsc();
+//        } catch (Exception e) {
+//
+//        }
+//    }f
+//
+//    private void viewAccountByDescRating(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        try {
+//
+//        } catch (Exception e) {
+//
+//        }
+//    }
 }
