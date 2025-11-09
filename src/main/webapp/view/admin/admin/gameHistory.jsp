@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>AKKHOR | Game Replay</title>
+    <title>Game Replay</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Admin CSS (giữ đồng bộ với list-game.jsp) -->
     <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/admin/img/favicon.png">
@@ -131,7 +131,7 @@
                         <table class="table display data-table text-nowrap">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th>Move number</th>
                                     <th>Player</th>
                                     <th>Notation</th>
                                     <th>FEN</th>

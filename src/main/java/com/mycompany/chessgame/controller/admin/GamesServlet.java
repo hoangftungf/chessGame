@@ -33,13 +33,41 @@ public class GamesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Game> listGame = gameDAO.findAll();
+        final int pageSize = 10;
+        int currentPage = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                currentPage = Integer.parseInt(pageParam);
+                if (currentPage < 1) {
+                    currentPage = 1;
+                }
+            } catch (NumberFormatException e) {
+                currentPage = 1;
+            }
+        }
 
+        int totalGames = gameDAO.countAll();
+        int totalPages = (int) Math.ceil((double) totalGames / pageSize);
+        if (totalPages == 0) {
+            totalPages = 1;
+        }
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        int offset = (currentPage - 1) * pageSize;
+        List<Game> listGame = gameDAO.findPage(offset, pageSize);
         List<Players> listPLayer = playerDAO.findAll();
 
         System.out.println("Number of games found: " + listGame.size());
         request.setAttribute("listGame", listGame);
         request.setAttribute("listPlayer", listPLayer);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("pageSize", pageSize);
+        request.setAttribute("totalGames", totalGames);
+        request.setAttribute("hasGames", totalGames > 0);
         request.getRequestDispatcher("view/admin/admin/list-game.jsp").forward(request, response);
 
     }
@@ -69,14 +97,11 @@ public class GamesServlet extends HttpServlet {
             boolean result = gameDAO.delete(deleteGame);
 
             // Goi lai list game
-            List<Game> listGame = gameDAO.findAll();
-
             // Set kết quả lên session
             session.setAttribute("deleteSuccess", result);
             session.setAttribute("message", "Đã xóa lịch sử trận đấu thành công!");
-            session.setAttribute("listGame", listGame);
             // Chuyển hướng về trang danh sách game
-            response.sendRedirect("view/admin/admin/list-game.jsp");
+            response.sendRedirect(request.getContextPath() + "/GamesServlet");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

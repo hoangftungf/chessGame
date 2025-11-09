@@ -93,8 +93,10 @@
                                                     <th>Game Mode</th>
                                                     <th>Result</th>
                                                     <th>Termination reason</th>
-                                                    <th>White ID</th>
-                                                    <th>Black ID</th>
+                                                    <th>White Player</th>
+                                                    <th>White Elo Change</th>
+                                                    <th>Black Player</th>
+                                                    <th>Black Elo Change</th>
                                                     <th>Start time</th>
                                                     <th>End time</th>
                                                 </tr>
@@ -113,6 +115,7 @@
                                                                 </c:if>
                                                             </c:forEach>
                                                         </td>
+                                                        <td>${game.white_rating_change}</td>
                                                         <td>
                                                             <c:forEach var="player" items="${listPlayer}">
                                                                 <c:if test="${player.player_id == game.black_id}">
@@ -120,6 +123,7 @@
                                                                 </c:if>
                                                             </c:forEach>
                                                         </td>
+                                                        <td>${game.black_rating_change}</td>
                                                         <td>${game.start_time}</td>
                                                         <td>${game.end_time}</td>
                                                         <td>
@@ -150,6 +154,66 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <c:if test="${hasGames}">
+                                        <c:set var="startRecord" value="${(currentPage - 1) * pageSize + 1}" />
+                                        <c:set var="endRecord" value="${currentPage * pageSize}" />
+                                        <c:if test="${endRecord > totalGames}">
+                                            <c:set var="endRecord" value="${totalGames}" />
+                                        </c:if>
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between mt-3">
+                                            <span class="text-muted mb-2 mb-md-0">Showing ${startRecord} - ${endRecord}
+                                                of ${totalGames} games</span>
+                                            <c:if test="${totalPages > 1}">
+                                                <nav aria-label="Games pagination">
+                                                    <ul class="pagination mb-0" style="align-items: center;">
+                                                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}" style="margin: 0 6px;">
+                                                            <c:choose>
+                                                                <c:when test="${currentPage == 1}">
+                                                                    <span class="page-link"
+                                                                        style="border: 1px solid #e0e0e0; border-radius: 4px; padding: 6px 18px; background-color: transparent; color: #8d8d8d; font-weight: 500; cursor: not-allowed; display: inline-block;">Previous</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <a class="page-link"
+                                                                        href="${pageContext.request.contextPath}/GamesServlet?page=${currentPage - 1}"
+                                                                        style="border: 1px solid #ffab01; border-radius: 4px; padding: 6px 18px; background-color: #ffffff; color: #ffab01; font-weight: 500; display: inline-block;">Previous</a>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </li>
+                                                        <c:forEach var="i" begin="1" end="${totalPages}">
+                                                            <li class="page-item ${i == currentPage ? 'active' : ''}" style="margin: 0 6px;">
+                                                                <c:choose>
+                                                                    <c:when test="${i == currentPage}">
+                                                                        <span class="page-link"
+                                                                            style="border: 1px solid #ffab01; border-radius: 4px; padding: 6px 18px; background-color: #ffab01; color: #ffffff; font-weight: 500; display: inline-block;">${i}</span>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <a class="page-link"
+                                                                            href="${pageContext.request.contextPath}/GamesServlet?page=${i}"
+                                                                            style="border: 1px solid #ffab01; border-radius: 4px; padding: 6px 18px; background-color: #ffffff; color: #ffab01; font-weight: 500; display: inline-block;">${i}</a>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </li>
+                                                        </c:forEach>
+                                                        <li
+                                                            class="page-item ${currentPage == totalPages ? 'disabled' : ''}"
+                                                            style="margin: 0 6px;">
+                                                            <c:choose>
+                                                                <c:when test="${currentPage == totalPages}">
+                                                                    <span class="page-link"
+                                                                        style="border: 1px solid #e0e0e0; border-radius: 4px; padding: 6px 18px; background-color: transparent; color: #8d8d8d; font-weight: 500; cursor: not-allowed; display: inline-block;">Next</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <a class="page-link"
+                                                                        href="${pageContext.request.contextPath}/GamesServlet?page=${currentPage + 1}"
+                                                                        style="border: 1px solid #ffab01; border-radius: 4px; padding: 6px 18px; background-color: #ffffff; color: #ffab01; font-weight: 500; display: inline-block;">Next</a>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </c:if>
+                                        </div>
+                                    </c:if>
                                     <!-- Modal Xác Nhận Xóa -->
                                     <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog"
                                         aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">

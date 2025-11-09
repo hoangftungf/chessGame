@@ -16,7 +16,7 @@
       <div class="nav-bar-header-one">
         <div class="header-logo">
             <a href="${pageContext.request.contextPath}/home">
-            <img src="${pageContext.request.contextPath}/admin/img/logo.png" alt="logo">
+            <img src="${pageContext.request.contextPath}/guest/assets/images/chess_logo.png" alt="logo" style="max-height: 45px; width: auto; height: auto; object-fit: contain;">
           </a>
         </div>
         <div class="toggle-button sidebar-toggle">

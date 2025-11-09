@@ -168,4 +168,42 @@ public class GameDAO extends DBContext implements I_DAO<Game> {
         game.setBlack_id(rs.getInt("black_id"));
         return game;
     }
+
+    public int countAll() {
+        int total = 0;
+        try {
+            connection = getConnection();
+            String sql = "SELECT COUNT(*) AS total FROM games";
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                total = resultSet.getInt("total");
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return total;
+    }
+
+    public List<Game> findPage(int offset, int limit) {
+        List<Game> games = new ArrayList<>();
+        try {
+            connection = getConnection();
+            String sql = "SELECT * FROM games ORDER BY start_time DESC LIMIT ? OFFSET ?";
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                games.add(getFromResultSet(resultSet));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return games;
+    }
 }
