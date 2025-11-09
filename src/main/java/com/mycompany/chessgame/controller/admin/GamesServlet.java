@@ -5,7 +5,9 @@
 package com.mycompany.chessgame.controller.admin;
 
 import com.mycompany.chessgame.dal.implement.GameDAO;
+import com.mycompany.chessgame.dal.implement.PlayerDAO;
 import com.mycompany.chessgame.entity.Game;
+import com.mycompany.chessgame.entity.Players;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,71 +15,71 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
 
 /**
  *
  * @author tungm
  */
-@WebServlet(name = "GamesServlet", urlPatterns = {"/GamesServlet"})
+@WebServlet(name = "GamesServlet", urlPatterns = { "/GamesServlet" })
 public class GamesServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet GamesServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet GamesServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    GameDAO gameDAO = new GameDAO();
+    PlayerDAO playerDAO = new PlayerDAO();
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        GameDAO gameDAO = new GameDAO();
+
         List<Game> listGame = gameDAO.findAll();
+
+        List<Players> listPLayer = playerDAO.findAll();
+
+        System.out.println("Number of games found: " + listGame.size());
         request.setAttribute("listGame", listGame);
+        request.setAttribute("listPlayer", listPLayer);
         request.getRequestDispatcher("view/admin/admin/list-game.jsp").forward(request, response);
+
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        switch (action) {
+            case "game-delete":
+                deleteGameDoPost(request, response);
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
+
+    private void deleteGameDoPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HttpSession session = request.getSession();
+            // Lấy ID của tài khoản cần xóa từ request
+            Integer id = Integer.parseInt(request.getParameter("id"));
+
+            // Thực hiện xóa lịch sử trận đấu từ database
+            Game deleteGame = gameDAO.findById(id);
+            boolean result = gameDAO.delete(deleteGame);
+
+            // Goi lai list game
+            List<Game> listGame = gameDAO.findAll();
+
+            // Set kết quả lên session
+            session.setAttribute("deleteSuccess", result);
+            session.setAttribute("message", "Đã xóa lịch sử trận đấu thành công!");
+            session.setAttribute("listGame", listGame);
+            // Chuyển hướng về trang danh sách game
+            response.sendRedirect("view/admin/admin/list-game.jsp");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**

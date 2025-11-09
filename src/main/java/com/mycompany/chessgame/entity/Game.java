@@ -34,8 +34,6 @@ public class Game {
     private Integer black_rating_change;
     private Timestamp start_time;
     private Timestamp end_time;
-    private String white_type;
-    private String black_type;
     private Integer white_id;
     private Integer black_id;
 
@@ -109,22 +107,6 @@ public class Game {
 
     public void setEnd_time(Timestamp end_time) {
         this.end_time = end_time;
-    }
-
-    public String getWhite_type() {
-        return white_type;
-    }
-
-    public void setWhite_type(String white_type) {
-        this.white_type = white_type;
-    }
-
-    public String getBlack_type() {
-        return black_type;
-    }
-
-    public void setBlack_type(String black_type) {
-        this.black_type = black_type;
     }
 
     public Integer getWhite_id() {

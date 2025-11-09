@@ -157,4 +157,24 @@ public class GameMoveDAO extends DBContext implements I_DAO<Game_Moves> {
         move.setCreated_at(rs.getTimestamp("created_at"));
         return move;
     }
+
+    // Implement lấy danh sách nước đi theo gameId, sắp xếp theo thứ tự lượt đi
+    public List<Game_Moves> findByGameId(int gameId) {
+        List<Game_Moves> moves = new ArrayList<>();
+        try {
+            connection = getConnection();
+            String sql = "SELECT * FROM game_moves WHERE game_id = ? ORDER BY move_number ASC, move_id ASC";
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, gameId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                moves.add(getFromResultSet(resultSet));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return moves;
+    }
 }

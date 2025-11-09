@@ -78,8 +78,8 @@ public class GameDAO extends DBContext implements I_DAO<Game> {
             connection = getConnection();
             String sql = "INSERT INTO games (game_mode, game_status, result, termination_reason, "
                     + "white_rating_change, black_rating_change, start_time, end_time, "
-                    + "white_type, black_type, white_id, black_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "white_id, black_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             statement = connection.prepareStatement(sql, statement.RETURN_GENERATED_KEYS);
             statement.setString(1, t.getGame_mode());
             statement.setString(2, t.getGame_status());
@@ -89,10 +89,8 @@ public class GameDAO extends DBContext implements I_DAO<Game> {
             statement.setInt(6, t.getBlack_rating_change());
             statement.setTimestamp(7, t.getStart_time());
             statement.setTimestamp(8, t.getEnd_time());
-            statement.setString(9, t.getWhite_type());
-            statement.setString(10, t.getBlack_type());
-            statement.setInt(11, t.getWhite_id());
-            statement.setInt(12, t.getBlack_id());
+            statement.setInt(9, t.getWhite_id());
+            statement.setInt(10, t.getBlack_id());
             
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
@@ -114,7 +112,7 @@ public class GameDAO extends DBContext implements I_DAO<Game> {
             connection = getConnection();
             String sql = "UPDATE games SET game_mode=?, game_status=?, result=?, "
                     + "termination_reason=?, white_rating_change=?, black_rating_change=?, "
-                    + "start_time=?, end_time=?, white_type=?, black_type=?, "
+                    + "start_time=?, end_time=?, "
                     + "white_id=?, black_id=? WHERE game_id=?";
             statement = connection.prepareStatement(sql);
             statement.setString(1, t.getGame_mode());
@@ -125,11 +123,9 @@ public class GameDAO extends DBContext implements I_DAO<Game> {
             statement.setInt(6, t.getBlack_rating_change());
             statement.setTimestamp(7, t.getStart_time());
             statement.setTimestamp(8, t.getEnd_time());
-            statement.setString(9, t.getWhite_type());
-            statement.setString(10, t.getBlack_type());
-            statement.setInt(11, t.getWhite_id());
-            statement.setInt(12, t.getBlack_id());
-            statement.setInt(13, t.getGame_id());
+            statement.setInt(9, t.getWhite_id());
+            statement.setInt(10, t.getBlack_id());
+            statement.setInt(11, t.getGame_id());
             result = statement.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -168,8 +164,6 @@ public class GameDAO extends DBContext implements I_DAO<Game> {
         game.setBlack_rating_change(rs.getInt("black_rating_change"));
         game.setStart_time(rs.getTimestamp("start_time"));
         game.setEnd_time(rs.getTimestamp("end_time"));
-        game.setWhite_type(rs.getString("white_type"));
-        game.setBlack_type(rs.getString("black_type"));
         game.setWhite_id(rs.getInt("white_id"));
         game.setBlack_id(rs.getInt("black_id"));
         return game;

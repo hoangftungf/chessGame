@@ -5,13 +5,10 @@
 package com.mycompany.chessgame.controller.admin;
 
 import com.mycompany.chessgame.config.GlobalConfig;
-
 import com.mycompany.chessgame.dal.implement.PlayerDAO;
 
 import com.mycompany.chessgame.entity.Players;
-import com.mycompany.chessgame.utils.EmailUtils;
 
-//import com.fall25.sp.swp.quanly.utils.EmailUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,13 +30,11 @@ import java.util.List;
 @WebServlet(name = "ManagerPlayerServlet", urlPatterns = {"/manager-player"})
 public class ManagerPlayerServlet extends HttpServlet {
 
-    private static final int ITERATIONS = 65536;
-    private static final int KEY_LENGTH = 256;
-    private static final int SALT_LENGTH = 16;
+    // private static final int ITERATIONS = 65536;
+    // private static final int KEY_LENGTH = 256;
+    // private static final int SALT_LENGTH = 16;
 
     PlayerDAO playerDAO = new PlayerDAO();
-    EmailUtils emailUtils = new EmailUtils();
-
     public static final String URL_LIST_ACCOUNT = "view/admin/admin/list-account.jsp";
     public static final String URL_ACCOUNT = "view/admin/admin/account.jsp";
     public static final String URL_ADD_ACCOUNT = "view/admin/admin/add-account.jsp";
