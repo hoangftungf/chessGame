@@ -74,7 +74,6 @@
                                                     <th>Email</th>
                                                     <th>Display Name</th>
                                                     <th>Rating</th>
-                                                    <th>Status</th>
                                                     <th>Created At</th>
                                                     <th>Updated At</th>
                                                     <th></th>
@@ -88,38 +87,6 @@
                                                         <td>${account.email}</td>
                                                         <td>${account.display_name}</td>
                                                         <td>${account.rating}</td>
-                                                        <td>
-                                                            <c:choose>
-                                                                <c:when test="${account.status == 'online'}">
-                                                                    <span style="color: white;
-                                                                  padding: 5px 10px;
-                                                                  background-color: #9FD702;
-                                                                  font-weight: 500;
-                                                                  border-radius: 10px;
-                                                                  ">
-                                                                        Online
-                                                                    </span>
-                                                                </c:when>
-                                                                <c:when test="${account.status == 'offline'}">
-                                                                    <span style="color: white;
-                                                                  padding: 5px 10px;
-                                                                  background-color: #DE3202;
-                                                                  font-weight: 500;
-                                                                  border-radius: 10px;
-                                                                  ">
-                                                                        Offline
-                                                                    </span>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <span style="color: white;
-                                                                  padding: 5px 10px;
-                                                                  background-color: #F2EC4E;
-                                                                  font-weight: 500;
-                                                                  border-radius: 10px;
-                                                                  ">In Game</span>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </td>
                                                         <td>${account.created_at}</td>
                                                         <td>${account.updated_at}</td>
 
