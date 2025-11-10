@@ -89,7 +89,7 @@ public class GamesServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            // Lấy ID của tài khoản cần xóa từ request
+            // Lấy ID của game cần xóa từ request
             Integer id = Integer.parseInt(request.getParameter("id"));
 
             // Thực hiện xóa lịch sử trận đấu từ database

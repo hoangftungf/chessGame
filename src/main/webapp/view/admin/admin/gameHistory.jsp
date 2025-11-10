@@ -22,6 +22,7 @@
     <script type="module">
       import 'https://unpkg.com/chessboard-element?module';
     </script>
+    <!-- CSS tuỳ biến cho trang replay: chia layout, danh sách nước đi và bảng chi tiết -->
     <style>
         .replay-controls {
             display: flex;
@@ -57,15 +58,22 @@
         .list-card {
             flex: 1 1 300px;
         }
+        .move-details-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .move-details-scroll table {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
 <div id="wrapper" class="wrapper bg-ash">
-    <!-- Header -->
+    <!-- Chèn phần header quản trị để đồng bộ giao diện -->
     <jsp:include page="../common/header.jsp"></jsp:include>
-    <!-- Page Area -->
+    <!-- Bọc toàn bộ nội dung trong layout dashboard -->
     <div class="dashboard-page-one">
-        <!-- Sidebar -->
+        <!-- Sidebar điều hướng dành cho admin -->
         <jsp:include page="../common/sider.jsp"></jsp:include>
 
         <div class="dashboard-content-one">
@@ -79,8 +87,9 @@
                     </div>
 
                     <div class="board-wrapper">
-                        <!-- Bàn cờ + Controls -->
+                        <!-- Cột bên trái: khối bàn cờ và cụm nút điều khiển -->
                         <div class="board-card">
+                            <!-- Các nút điều khiển replay: tua đầu/cuối, lùi/tiến từng bước, play/pause và chỉnh tốc độ -->
                             <div class="replay-controls">
                                 <button id="btnFirst" class="btn btn-outline-secondary btn-sm">|&lt;</button>
                                 <button id="btnPrev" class="btn btn-outline-secondary btn-sm">&lt;</button>
@@ -102,7 +111,7 @@
                             </div>
                         </div>
 
-                        <!-- Danh sách nước đi -->
+                        <!-- Cột bên phải: danh sách nước đi cho phép click để nhảy tới vị trí tương ứng -->
                         <div class="list-card">
                             <h5>Moves</h5>
                             <div id="movesList" class="moves-list">
@@ -119,7 +128,7 @@
                 </div>
             </div>
 
-            <!-- Bảng dữ liệu chi tiết (tùy chọn) -->
+            <!-- Bảng dữ liệu chi tiết (tùy chọn) hiển thị toàn bộ metadata từng nước đi -->
             <div class="card height-auto">
                 <div class="card-body">
                     <div class="heading-layout1">
@@ -127,7 +136,7 @@
                             <h3>Move Details</h3>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive move-details-scroll">
                         <table class="table display data-table text-nowrap">
                             <thead>
                                 <tr>
@@ -168,7 +177,7 @@
 <script src="${pageContext.request.contextPath}/admin/js/bootstrap.min.js"></script>
 
 <script>
-    // Build moves array từ server
+    // Biến moves lưu toàn bộ lịch sử nước đi, được build từ dữ liệu server-side
     const moves = [
         <c:forEach var="m" items="${moves}" varStatus="st">
         {
@@ -176,15 +185,12 @@
             number: ${m.move_number},
             color: '<c:out value="${m.player_color}"/>',
             notation: '<c:out value="${m.move_notation}"/>'
-<c:choose>
-<c:when test="${not st.last}">},</c:when>
-    <c:otherwise></c:otherwise>
-</c:choose>
+        }<c:if test="${not st.last}">,</c:if>
         </c:forEach>
     ];
 
     // State
-    let idx = -1; // -1 = start position
+    let idx = -1; // -1 đại diện cho trạng thái ban đầu trước khi có nước đi nào
     let timer = null;
     let speedMs = 800;
 
@@ -217,7 +223,7 @@
     }
 
     function play() {
-        if (timer) return;
+        if (timer) return; // đang chạy rồi thì không tạo timer mới
         timer = setInterval(() => {
             if (idx >= moves.length - 1) {
                 pause();
@@ -240,7 +246,7 @@
         document.getElementById('btnPlayPause').classList.add('btn-warning');
     }
 
-    // Controls
+    // Gắn sự kiện cho các nút điều khiển bàn cờ
     document.getElementById('btnFirst').addEventListener('click', () => { pause(); showIndex(-1); });
     document.getElementById('btnPrev').addEventListener('click', () => { pause(); showIndex(idx - 1); });
     document.getElementById('btnPlayPause').addEventListener('click', () => { timer ? pause() : play(); });
@@ -251,7 +257,7 @@
         if (timer) { pause(); play(); }
     });
 
-    // Click vào item move để nhảy tới
+    // Cho phép click vào dòng nước đi để nhảy tới trạng thái tương ứng
     document.getElementById('movesList').addEventListener('click', (e) => {
         const item = e.target.closest('.move-item');
         if (!item) return;
@@ -260,7 +266,7 @@
         showIndex(i);
     });
 
-    // Init
+    // Khởi tạo màn hình ở trạng thái ban đầu
     showIndex(-1);
 </script>
 </body>
