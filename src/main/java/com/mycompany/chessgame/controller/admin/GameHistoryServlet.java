@@ -30,7 +30,7 @@ public class GameHistoryServlet extends HttpServlet {
 
             request.setAttribute("gameId", gameId);
             request.setAttribute("moves", moves);
-            // Forward tới trang admin thay vì guest
+            // Forward tới trang gameHistory
             request.getRequestDispatcher("/view/admin/admin/gameHistory.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid game ID");
