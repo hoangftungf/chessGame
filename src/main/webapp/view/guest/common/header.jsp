@@ -7,7 +7,7 @@
     <title>Chess Game</title>
     <style>
         .header-area {
-            padding: 20px 0;
+            padding: 24px 0;
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             text-align: center;
@@ -16,17 +16,23 @@
             font-size: 32px;
             font-weight: bold;
             color: #F77204;
-            margin: 0; /* keep title vertically centered in flex row */
+            margin: 0;
         }
-        /* NEW: align title and buttons on the same row */
         .header-area .container {
+            max-width: 720px;
+            margin: 0 auto;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 16px;
         }
         .auth-buttons {
             display: flex;
+            flex-direction: column;
             gap: 12px;
+            width: 100%;
+            max-width: 320px;
         }
         .auth-buttons .btn-auth {
             background-color: #F77204; /* orange */
@@ -36,6 +42,7 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: 600;
+            text-align: center;
         }
         .auth-buttons .btn-auth:hover {
             background-color: #e36300; /* slightly darker on hover */
@@ -47,10 +54,6 @@
     <header class="header-area style-1">
         <div class="container">
             <h1 class="header-title">Chess Game</h1>
-            <div class="auth-buttons">
-              <a href="${pageContext.request.contextPath}/login" class="btn-auth">Đăng nhập</a>
-              <a href="${pageContext.request.contextPath}/register" class="btn-auth">Đăng ký</a>
-            </div>
         </div>
     </header>
 </body>

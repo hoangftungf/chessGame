@@ -14,8 +14,6 @@ import java.util.Map;
 import com.mycompany.chessgame.dal.DBContext;
 import com.mycompany.chessgame.dal.I_DAO;
 import com.mycompany.chessgame.entity.Players;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 /**
  *

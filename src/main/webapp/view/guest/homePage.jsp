@@ -52,6 +52,22 @@
                     /* Đặt nền trang thành màu xanh pastel */
                     body {
                         background-color: #A8E6CF; /* pastel green */
+                        margin: 0;
+                        min-height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        text-align: center;
+                        font-family: "Helvetica Neue", Arial, sans-serif;
+                    }
+
+                    .home-wrapper {
+                        width: min(960px, 100%);
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 32px;
+                        padding: 32px 16px 48px;
                     }
 
                     .hero-style1 .hero-img {
@@ -61,8 +77,8 @@
                         padding: 40px 0;
                     }
                     .hero-style1 .hero-img img.device-width {
-                        width: 50vw;           /* 1/2 chiều rộng màn hình */
-                        height: 50vh;          /* 1/2 chiều cao màn hình */
+                        width: min(480px, 80vw);
+                        height: auto;
                         object-fit: cover;
                         object-position: center;
                         display: block;
@@ -72,17 +88,14 @@
                         margin-top: 16px;
                     }
 
-                    /* Ẩn nút auth trên header chỉ ở trang này */
-                    .header-area .auth-buttons { 
-                        display: none !important; 
-                    }
-
                     /* CTA buttons dưới banner */
                     .cta-buttons {
                         display: flex;
-                        justify-content: center;
+                        flex-direction: column;
+                        align-items: center;
                         gap: 16px;
                         margin: 24px 0 48px;
+                        width: 100%;
                     }
                     .btn-cta {
                         background-color: #F77204; /* orange */
@@ -91,6 +104,7 @@
                         border-radius: 8px;
                         text-decoration: none;
                         font-weight: 600;
+                        width: min(320px, 80%);
                     }
                     .btn-cta:hover {
                         background-color: #e36300;
@@ -103,31 +117,25 @@
                 <!-- ========== header start============= -->
                 <jsp:include page="./common/header.jsp"></jsp:include>
                 <!-- ========== header end============= -->
-                <!-- ========== Hero start============= -->
-                <div class="hero-style1">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-12 px-0">
-                                <div class="hero-img">
-                                    <!-- Thu nhỏ banner: bỏ style height:100vh; width:100% và dùng CSS ở trên -->
-                                    <img class="device-width"
-                                         src="${pageContext.request.contextPath}/guest/assets/images/banner.jpg" alt="">
-                                </div>
-                            </div>
+                <main class="home-wrapper">
+                    <!-- ========== Hero start============= -->
+                    <section class="hero-style1">
+                        <div class="hero-img">
+                            <img class="device-width"
+                                 src="${pageContext.request.contextPath}/guest/assets/images/banner.jpg" alt="">
                         </div>
+                    </section>
+                    <!-- Thêm cụm nút dưới banner -->
+                    <div class="cta-buttons">
+                        <a href="${pageContext.request.contextPath}/manager-player?action=list-account" class="btn-cta">
+                            Xem danh sách người chơi
+                        </a>
+                        <a href="${pageContext.request.contextPath}/GamesServlet" class="btn-cta">
+                            Xem lịch sử đấu
+                        </a>
                     </div>
-                </div>
-                <!-- Thêm cụm nút dưới banner -->
-                <div class="cta-buttons">
-                    <a href="${pageContext.request.contextPath}/manager-player?action=list-account" class="btn-cta">
-                        Xem danh sách người chơi
-                    </a>
-                    <a href="${pageContext.request.contextPath}/GamesServlet" class="btn-cta">
-                        Xem lịch sử đấu
-                    </a>
-                </div>
-                </div>
-                <!-- ========== Hero end============= -->
+                    <!-- ========== Hero end============= -->
+                </main>
 
                 <!-- js file link -->
                 <script data-cfasync="false"
