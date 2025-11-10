@@ -23,7 +23,6 @@ public class Game_Moves {
     private String player_color;
     private String move_notation;
     private Boolean is_checkmate;
-    private String board_state_fen;
     private Timestamp created_at;
 
     public Integer getMove_id() {
@@ -72,14 +71,6 @@ public class Game_Moves {
 
     public void setIs_checkmate(Boolean is_checkmate) {
         this.is_checkmate = is_checkmate;
-    }
-
-    public String getBoard_state_fen() {
-        return board_state_fen;
-    }
-
-    public void setBoard_state_fen(String board_state_fen) {
-        this.board_state_fen = board_state_fen;
     }
 
     public Timestamp getCreated_at() {

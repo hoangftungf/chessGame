@@ -77,16 +77,15 @@ public class GameMoveDAO extends DBContext implements I_DAO<Game_Moves> {
         try {
             connection = getConnection();
             String sql = "INSERT INTO game_moves (game_id, move_number, player_color, "
-                    + "move_notation, is_checkmate, board_state_fen, created_at) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + "move_notation, is_checkmate, created_at) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
             statement = connection.prepareStatement(sql, statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, t.getGame_id());
             statement.setInt(2, t.getMove_number());
             statement.setString(3, t.getPlayer_color());
             statement.setString(4, t.getMove_notation());
             statement.setBoolean(5, t.getIs_checkmate());
-            statement.setString(6, t.getBoard_state_fen());
-            statement.setTimestamp(7, t.getCreated_at());
+            statement.setTimestamp(6, t.getCreated_at());
             
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
@@ -107,7 +106,7 @@ public class GameMoveDAO extends DBContext implements I_DAO<Game_Moves> {
         try {
             connection = getConnection();
             String sql = "UPDATE game_moves SET game_id=?, move_number=?, player_color=?, "
-                    + "move_notation=?, is_checkmate=?, board_state_fen=?, created_at=? "
+                    + "move_notation=?, is_checkmate=?, created_at=? "
                     + "WHERE move_id=?";
             statement = connection.prepareStatement(sql);
             statement.setInt(1, t.getGame_id());
@@ -115,9 +114,8 @@ public class GameMoveDAO extends DBContext implements I_DAO<Game_Moves> {
             statement.setString(3, t.getPlayer_color());
             statement.setString(4, t.getMove_notation());
             statement.setBoolean(5, t.getIs_checkmate());
-            statement.setString(6, t.getBoard_state_fen());
-            statement.setTimestamp(7, t.getCreated_at());
-            statement.setInt(8, t.getMove_id());
+            statement.setTimestamp(6, t.getCreated_at());
+            statement.setInt(7, t.getMove_id());
             result = statement.executeUpdate() > 0;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -153,7 +151,6 @@ public class GameMoveDAO extends DBContext implements I_DAO<Game_Moves> {
         move.setPlayer_color(rs.getString("player_color"));
         move.setMove_notation(rs.getString("move_notation"));
         move.setIs_checkmate(rs.getBoolean("is_checkmate"));
-        move.setBoard_state_fen(rs.getString("board_state_fen"));
         move.setCreated_at(rs.getTimestamp("created_at"));
         return move;
     }

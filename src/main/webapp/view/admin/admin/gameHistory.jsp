@@ -143,7 +143,6 @@
                                     <th>Move number</th>
                                     <th>Player</th>
                                     <th>Notation</th>
-                                    <th>FEN</th>
                                     <th>Checkmate</th>
                                     <th>Created At</th>
                                 </tr>
@@ -154,7 +153,6 @@
                                         <td>${m.move_number}</td>
                                         <td>${m.player_color}</td>
                                         <td>${m.move_notation}</td>
-                                        <td>${m.board_state_fen}</td>
                                         <td><c:choose><c:when test="${m.is_checkmate}">Yes</c:when><c:otherwise>No</c:otherwise></c:choose></td>
                                         <td>${m.created_at}</td>
                                     </tr>
@@ -176,18 +174,33 @@
 <script src="${pageContext.request.contextPath}/admin/js/popper.min.js"></script>
 <script src="${pageContext.request.contextPath}/admin/js/bootstrap.min.js"></script>
 
-<script>
+<script type="module">
+    import { Chess } from 'https://cdn.jsdelivr.net/npm/chess.js@1.0.0-beta.6/+esm';
+
     // Biến moves lưu toàn bộ lịch sử nước đi, được build từ dữ liệu server-side
     const moves = [
         <c:forEach var="m" items="${moves}" varStatus="st">
         {
-            fen: '<c:out value="${m.board_state_fen}"/>',
             number: ${m.move_number},
             color: '<c:out value="${m.player_color}"/>',
             notation: '<c:out value="${m.move_notation}"/>'
         }<c:if test="${not st.last}">,</c:if>
         </c:forEach>
     ];
+
+    // Duyệt notation để dựng lại FEN sau mỗi nước đi
+    const chess = new Chess();
+    const fenPositions = ['start'];
+    moves.forEach((m, index) => {
+        try {
+            chess.move(m.notation, { sloppy: true });
+            fenPositions.push(chess.fen());
+        } catch (err) {
+            console.error(`Không thể áp dụng nước đi ${m.notation} tại vị trí ${index}`, err);
+            // Lặp lại trạng thái trước để tránh hỏng luồng phát
+            fenPositions.push(fenPositions[fenPositions.length - 1]);
+        }
+    });
 
     // State
     let idx = -1; // -1 đại diện cho trạng thái ban đầu trước khi có nước đi nào
@@ -216,7 +229,8 @@
             currentInfoEl.textContent = 'Start position';
         } else {
             const m = moves[idx];
-            boardEl.setAttribute('position', m.fen);
+            const fen = fenPositions[idx + 1] || 'start';
+            boardEl.setAttribute('position', fen);
             currentInfoEl.textContent = `#${m.number} ${m.color}: ${m.notation}`;
         }
         updateActiveItem();
